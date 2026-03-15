@@ -1,16 +1,25 @@
 import React, { useState, useRef } from 'react'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
-import { useNavigate } from 'react-router'
+import { useAuth } from '../../auth/hooks/useAuth.js'
+import { useNavigate, Link } from 'react-router'
 
 const Home = () => {
 
     const { loading, generateReport,reports } = useInterview()
+    const { handleLogout } = useAuth()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
+    const [ selectedFileName, setSelectedFileName ] = useState("")
     const resumeInputRef = useRef()
 
     const navigate = useNavigate()
+
+    const handleFileChange = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setSelectedFileName(e.target.files[0].name)
+        }
+    }
 
     const handleGenerateReport = async () => {
         const resumeFile = resumeInputRef.current.files[ 0 ]
@@ -28,6 +37,21 @@ const Home = () => {
 
     return (
         <div className='home-page'>
+        
+            {/* Absolute Top Left Logo */}
+            <Link to="/" style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 99, fontSize: '1.5rem', fontWeight: '800', color: '#e6edf3', textDecoration: 'none', letterSpacing: '-0.5px' }}>
+                Skill<span style={{ color: '#ff2d78' }}>Bridge</span> <span style={{ fontWeight: '400', color: '#7d8590' }}>AI</span>
+            </Link>
+
+            {/* Absolute Top Right Logout Button */}
+            <button 
+                onClick={handleLogout}
+                style={{ position: 'absolute', top: '24px', right: '24px', padding: '10px 20px', background: 'transparent', color: '#ef4444', borderRadius: '8px', border: '1px solid #ef4444', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.9rem', transition: 'all 0.2s' }}
+                onMouseEnter={(e) => { e.target.style.background = '#ef4444'; e.target.style.color = '#fff'; }}
+                onMouseLeave={(e) => { e.target.style.background = 'transparent'; e.target.style.color = '#ef4444'; }}
+            >
+                Log Out
+            </button>
 
             {/* Page Header */}
             <header className='page-header'>
@@ -77,16 +101,21 @@ const Home = () => {
                             </label>
                             <label className='dropzone' htmlFor='resume'>
                                 <span className='dropzone__icon'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
+                                    {selectedFileName ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>
+                                    )}
                                 </span>
-                                <p className='dropzone__title'>Click to upload or drag &amp; drop</p>
-                                <p className='dropzone__subtitle'>PDF or DOCX (Max 5MB)</p>
-                                <input ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
+                                <p className='dropzone__title'>
+                                    {selectedFileName ? <span style={{ color: "white", fontWeight: "bold" }}>{selectedFileName}</span> : "Click to upload or drag & drop"}
+                                </p>
+                                <p className='dropzone__subtitle'>
+                                    {selectedFileName ? "File attached successfully" : "PDF or DOCX (Max 5MB)"}
+                                </p>
+                                <input onChange={handleFileChange} ref={resumeInputRef} hidden type='file' id='resume' name='resume' accept='.pdf,.docx' />
                             </label>
                         </div>
-
-                        {/* OR Divider */}
-                        <div className='or-divider'><span>OR</span></div>
 
                         {/* Quick Self-Description */}
                         <div className='self-description'>

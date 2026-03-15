@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import '../style/interview.scss'
 import { useInterview } from '../hooks/useInterview.js'
-import { useNavigate, useParams } from 'react-router'
+import { useAuth } from '../../auth/hooks/useAuth.js'
+import { useNavigate, useParams, Link } from 'react-router'
 
 
 
@@ -60,6 +61,7 @@ const RoadMapDay = ({ day }) => (
 const Interview = () => {
     const [ activeNav, setActiveNav ] = useState('technical')
     const { report, getReportById, loading, getResumePdf } = useInterview()
+    const { handleLogout } = useAuth()
     const { interviewId } = useParams()
 
     useEffect(() => {
@@ -85,6 +87,22 @@ const Interview = () => {
 
     return (
         <div className='interview-page'>
+
+            {/* Absolute Top Left Logo */}
+            <Link to="/" style={{ position: 'absolute', top: '24px', left: '24px', zIndex: 99, fontSize: '1.2rem', fontWeight: '800', color: '#e6edf3', textDecoration: 'none', letterSpacing: '-0.5px' }}>
+                Skill<span style={{ color: '#ff2d78' }}>Bridge</span> <span style={{ fontWeight: '400', color: '#7d8590' }}>AI</span>
+            </Link>
+
+            {/* Absolute Top Right Logout Button */}
+            <button 
+                onClick={handleLogout}
+                style={{ position: 'absolute', top: '16px', right: '24px', zIndex: 99, padding: '8px 16px', background: 'transparent', color: '#ef4444', borderRadius: '8px', border: '1px solid #ef4444', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.85rem', transition: 'all 0.2s' }}
+                onMouseEnter={(e) => { e.target.style.background = '#ef4444'; e.target.style.color = '#fff'; }}
+                onMouseLeave={(e) => { e.target.style.background = 'transparent'; e.target.style.color = '#ef4444'; }}
+            >
+                Log Out
+            </button>
+
             <div className='interview-layout'>
 
                 {/* ── Left Nav ── */}

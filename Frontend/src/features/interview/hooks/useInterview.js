@@ -2,6 +2,7 @@ import { getAllInterviewReports, generateInterviewReport, getInterviewReportById
 import { useContext, useEffect } from "react"
 import { InterviewContext } from "../interview.context"
 import { useParams } from "react-router"
+import { toast } from "react-toastify"
 
 
 export const useInterview = () => {
@@ -21,8 +22,10 @@ export const useInterview = () => {
         try {
             response = await generateInterviewReport({ jobDescription, selfDescription, resumeFile })
             setReport(response.interviewReport)
+            toast.success("Interview report generated successfully!")
         } catch (error) {
             console.log(error)
+            toast.error(error?.response?.data?.message || "Failed to generate report")
         } finally {
             setLoading(false)
         }
@@ -38,6 +41,7 @@ export const useInterview = () => {
             setReport(response.interviewReport)
         } catch (error) {
             console.log(error)
+            toast.error("Failed to fetch interview report")
         } finally {
             setLoading(false)
         }
@@ -70,9 +74,11 @@ export const useInterview = () => {
             link.setAttribute("download", `resume_${interviewReportId}.pdf`)
             document.body.appendChild(link)
             link.click()
+            toast.success("Resume downloaded successfully!")
         }
         catch (error) {
             console.log(error)
+            toast.error("Failed to generate resume PDF")
         } finally {
             setLoading(false)
         }
