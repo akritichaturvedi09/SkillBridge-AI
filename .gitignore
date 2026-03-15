@@ -1,1 +1,9 @@
 .idea
+.env
+node_modules
+.DS_Store
+.env.local
+.env.production
+.env.development
+.env.example
+.env.test
