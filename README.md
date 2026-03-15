@@ -48,9 +48,16 @@ npm install
 Create a `.env` file in the Backend directory:
 
 ```env
+PORT:3000
 GOOGLE_GENAI_API_KEY=your_google_genai_api_key
 MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+FRONTEND_URL=http://localhost:5173
+```
+Create a `.env` file in the Frontend directory:
+
+```env
+VITE_BACKEND_URL=http://localhost:3000
 ```
 
 Start the backend server:
