@@ -7,10 +7,7 @@ connectToDB().catch((err) => {
     console.error("DB connection error:", err)
 })
 
-if (process.env.NODE_ENV !== "production") {
-    app.listen(process.env.PORT || 3000, () => {
-        console.log("Server Started")
-    })
-}
+app.listen(process.env.PORT || 3000, () => {
+    console.log("Server Started")
+})
 
-module.exports = app
